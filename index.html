@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk & Daftar Tryout CPNS 2026</title>
+    <title>Daftar & Masuk Simulasi Ujian</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #f0f2f5; max-width: 450px; margin: 40px auto; padding: 15px; }
-        .wadah { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        /* Latar belakang biru profesional yang bersih */
+        body { 
+            background: linear-gradient(135deg, #0f4c81 0%, #1f73b7 100%); 
+            max-width: 450px; 
+            margin: 40px auto; 
+            padding: 15px; 
+            min-height: 100vh;
+        }
+        
+        .wadah { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         
         .header-teks { margin-bottom: 25px; }
         .header-teks h2 { color: #111827; margin: 0 0 8px 0; font-size: 24px; font-weight: 700; }
@@ -55,35 +64,35 @@
 <body>
 
 <div class="wadah">
-    <!-- Header Dinamis -->
+    <!-- Header Dinamis (Default: Daftar) -->
     <div class="header-teks">
-        <h2 id="teks-judul">Masuk ke Akun</h2>
-        <p id="teks-keterangan">Lanjutkan persiapan CPNS Anda</p>
+        <h2 id="teks-judul">Buat Akun Baru</h2>
+        <p id="teks-keterangan">Mulai perjalanan ujian Anda hari ini</p>
     </div>
 
-    <!-- Tab Pilihan -->
+    <!-- Tab Pilihan (Dibalik: Daftar di kiri, Masuk di kanan) -->
     <div class="tab-container" id="menu-tab">
-        <div class="tab-btn aktif" id="tab-masuk" onclick="tampilkanLogin()">Masuk</div>
-        <div class="tab-btn" id="tab-daftar" onclick="tampilkanDaftar()">Daftar</div>
+        <div class="tab-btn aktif" id="tab-daftar" onclick="tampilkanDaftar()">Daftar</div>
+        <div class="tab-btn" id="tab-masuk" onclick="tampilkanLogin()">Masuk</div>
     </div>
 
-    <!-- Form Login -->
-    <div id="form-login">
+    <!-- Form Daftar (Ditampilkan Pertama) -->
+    <div id="form-daftar">
+        <input type="text" id="nama" placeholder="Nama Lengkap" required>
+        <input type="email" id="email" placeholder="Alamat Email" required>
+        <input type="tel" id="wa" placeholder="Nomor WhatsApp" required>
+        <input type="password" id="sandi-daftar" placeholder="Buat Kata Sandi (Min. 6 karakter)" required>
+        <button class="btn-utama" id="btn-daftar" onclick="prosesDaftar()">Daftar Sekarang</button>
+    </div>
+
+    <!-- Form Login (Disembunyikan Secara Default) -->
+    <div id="form-login" style="display:none;">
         <input type="email" id="login-email" placeholder="Alamat Email">
         <input type="password" id="login-sandi" placeholder="Kata Sandi">
         <div style="text-align: right; margin-top: 5px;">
             <span class="tautan" style="font-size: 13px; color: #6b7280;" onclick="tampilkanLupaSandi()">Lupa kata sandi?</span>
         </div>
         <button class="btn-utama" id="btn-login" onclick="cekLogin()">Masuk</button>
-    </div>
-
-    <!-- Form Daftar -->
-    <div id="form-daftar" style="display:none;">
-        <input type="text" id="nama" placeholder="Nama Lengkap" required>
-        <input type="email" id="email" placeholder="Alamat Email" required>
-        <input type="tel" id="wa" placeholder="Nomor WhatsApp" required>
-        <input type="password" id="sandi-daftar" placeholder="Buat Kata Sandi (Min. 6 karakter)" required>
-        <button class="btn-utama" id="btn-daftar" onclick="prosesDaftar()">Daftar Sekarang</button>
     </div>
 
     <!-- Form Lupa Sandi -->
@@ -119,16 +128,6 @@ function sembunyikanSemua() {
     document.getElementById('notif').style.display = 'none';
 }
 
-function tampilkanLogin() {
-    sembunyikanSemua();
-    document.getElementById('form-login').style.display = 'block';
-    document.getElementById('menu-tab').style.display = 'flex';
-    document.getElementById('tab-masuk').className = 'tab-btn aktif';
-    document.getElementById('tab-daftar').className = 'tab-btn';
-    document.getElementById('teks-judul').innerText = 'Masuk ke Akun';
-    document.getElementById('teks-keterangan').innerText = 'Lanjutkan persiapan CPNS Anda';
-}
-
 function tampilkanDaftar() {
     sembunyikanSemua();
     document.getElementById('form-daftar').style.display = 'block';
@@ -136,7 +135,17 @@ function tampilkanDaftar() {
     document.getElementById('tab-daftar').className = 'tab-btn aktif';
     document.getElementById('tab-masuk').className = 'tab-btn';
     document.getElementById('teks-judul').innerText = 'Buat Akun Baru';
-    document.getElementById('teks-keterangan').innerText = 'Mulai perjalanan CPNS Anda hari ini';
+    document.getElementById('teks-keterangan').innerText = 'Mulai perjalanan ujian Anda hari ini';
+}
+
+function tampilkanLogin() {
+    sembunyikanSemua();
+    document.getElementById('form-login').style.display = 'block';
+    document.getElementById('menu-tab').style.display = 'flex';
+    document.getElementById('tab-masuk').className = 'tab-btn aktif';
+    document.getElementById('tab-daftar').className = 'tab-btn';
+    document.getElementById('teks-judul').innerText = 'Masuk ke Akun';
+    document.getElementById('teks-keterangan').innerText = 'Lanjutkan persiapan Anda';
 }
 
 function tampilkanLupaSandi() {

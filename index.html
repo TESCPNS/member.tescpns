@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk & Daftar Tryout CPNS 2026</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f0f2f5; max-width: 450px; margin: 40px auto; padding: 15px; }
+        .wadah { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        .header-teks { margin-bottom: 25px; }
+        .header-teks h2 { color: #111827; margin: 0 0 8px 0; font-size: 24px; font-weight: 700; }
+        .header-teks p { color: #6b7280; margin: 0; font-size: 15px; }
+
+        .tab-container {
+            display: flex;
+            background: #f3f4f6;
+            border-radius: 30px;
+            padding: 4px;
+            margin-bottom: 25px;
+        }
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #4b5563;
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-btn.aktif {
+            background: white;
+            color: #111827;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        input { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px; background: #f9fafb; transition: all 0.2s; }
+        input:focus { outline: none; border-color: #3b82f6; background: white; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+        
+        .btn-utama { width: 100%; padding: 14px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: background 0.2s; }
+        .btn-utama:hover { background: #1557b0; }
+        .btn-utama:disabled { background: #9ca3af; cursor: not-allowed; }
+        
+        .tautan { text-align: center; margin-top: 15px; color: #3b82f6; cursor: pointer; font-size: 14px; font-weight: 500; }
+        .tautan:hover { text-decoration: underline; }
+        
+        .pesan { margin-top: 15px; padding: 12px; border-radius: 8px; display: none; font-size: 14px; text-align: center; }
+        .sukses { background: #def7ec; color: #03543f; border: 1px solid #c3e6cb; }
+        .gagal { background: #fde8e8; color: #9b1c1c; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+<div class="wadah">
+    <!-- Header Dinamis -->
+    <div class="header-teks">
+        <h2 id="teks-judul">Masuk ke Akun</h2>
+        <p id="teks-keterangan">Lanjutkan persiapan CPNS Anda</p>
+    </div>
+
+    <!-- Tab Pilihan -->
+    <div class="tab-container" id="menu-tab">
+        <div class="tab-btn aktif" id="tab-masuk" onclick="tampilkanLogin()">Masuk</div>
+        <div class="tab-btn" id="tab-daftar" onclick="tampilkanDaftar()">Daftar</div>
+    </div>
+
+    <!-- Form Login -->
+    <div id="form-login">
+        <input type="email" id="login-email" placeholder="Alamat Email">
+        <input type="password" id="login-sandi" placeholder="Kata Sandi">
+        <div style="text-align: right; margin-top: 5px;">
+            <span class="tautan" style="font-size: 13px; color: #6b7280;" onclick="tampilkanLupaSandi()">Lupa kata sandi?</span>
+        </div>
+        <button class="btn-utama" id="btn-login" onclick="cekLogin()">Masuk</button>
+    </div>
+
+    <!-- Form Daftar -->
+    <div id="form-daftar" style="display:none;">
+        <input type="text" id="nama" placeholder="Nama Lengkap" required>
+        <input type="email" id="email" placeholder="Alamat Email" required>
+        <input type="tel" id="wa" placeholder="Nomor WhatsApp" required>
+        <input type="password" id="sandi-daftar" placeholder="Buat Kata Sandi (Min. 6 karakter)" required>
+        <button class="btn-utama" id="btn-daftar" onclick="prosesDaftar()">Daftar Sekarang</button>
+    </div>
+
+    <!-- Form Lupa Sandi -->
+    <div id="form-lupa" style="display:none;">
+        <input type="email" id="email-lupa" placeholder="Email Terdaftar">
+        <button class="btn-utama" id="btn-lupa" onclick="prosesLupaSandi()">Kirim Link Reset</button>
+        <div class="tautan" onclick="tampilkanLogin()">Batal & Kembali masuk</div>
+    </div>
+
+    <div id="notif" class="pesan"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Konfigurasi Supabase
+const SUPABASE_URL = "https://fnxkxwecgkfhdphlzfft.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZueGt4d2VjZ2tmaGRwaGx6ZmZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzQ2NTUsImV4cCI6MjEwMDUxMDY1NX0.r7p2YF4RVEZQQGDAQqvL4Am9n8vpQbuIQQjYLeH1upw";
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function tampilkanPesan(tipe, teks) {
+    const notif = document.getElementById('notif');
+    notif.className = `pesan ${tipe}`;
+    notif.innerHTML = teks;
+    notif.style.display = "block";
+}
+
+function sembunyikanSemua() {
+    document.getElementById('form-daftar').style.display = 'none';
+    document.getElementById('form-login').style.display = 'none';
+    document.getElementById('form-lupa').style.display = 'none';
+    document.getElementById('notif').style.display = 'none';
+}
+
+function tampilkanLogin() {
+    sembunyikanSemua();
+    document.getElementById('form-login').style.display = 'block';
+    document.getElementById('menu-tab').style.display = 'flex';
+    document.getElementById('tab-masuk').className = 'tab-btn aktif';
+    document.getElementById('tab-daftar').className = 'tab-btn';
+    document.getElementById('teks-judul').innerText = 'Masuk ke Akun';
+    document.getElementById('teks-keterangan').innerText = 'Lanjutkan persiapan CPNS Anda';
+}
+
+function tampilkanDaftar() {
+    sembunyikanSemua();
+    document.getElementById('form-daftar').style.display = 'block';
+    document.getElementById('menu-tab').style.display = 'flex';
+    document.getElementById('tab-daftar').className = 'tab-btn aktif';
+    document.getElementById('tab-masuk').className = 'tab-btn';
+    document.getElementById('teks-judul').innerText = 'Buat Akun Baru';
+    document.getElementById('teks-keterangan').innerText = 'Mulai perjalanan CPNS Anda hari ini';
+}
+
+function tampilkanLupaSandi() {
+    sembunyikanSemua();
+    document.getElementById('form-lupa').style.display = 'block';
+    document.getElementById('menu-tab').style.display = 'none';
+    document.getElementById('teks-judul').innerText = 'Lupa Kata Sandi';
+    document.getElementById('teks-keterangan').innerText = 'Kami akan mengirimkan link reset ke email Anda';
+}
+
+// Proses Pendaftaran Akun Baru
+async function prosesDaftar() {
+    const nama = document.getElementById('nama').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const wa = document.getElementById('wa').value.trim();
+    const sandi = document.getElementById('sandi-daftar').value;
+    const btn = document.getElementById('btn-daftar');
+
+    if(!nama || !email || !wa || !sandi) {
+        tampilkanPesan("gagal", "⚠️ Semua kolom wajib diisi!");
+        return;
+    }
+    if(sandi.length < 6) {
+        tampilkanPesan("gagal", "⚠️ Kata sandi minimal 6 karakter!");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Memproses...";
+
+    const { data, error } = await sb.auth.signUp({
+        email: email,
+        password: sandi,
+        options: {
+            data: { nama_lengkap: nama, no_whatsapp: wa, is_premium: false }
+        }
+    });
+
+    if (error) {
+        tampilkanPesan("gagal", "❌ Gagal: " + error.message);
+    } else {
+        tampilkanPesan("sukses", "✅ Pendaftaran Berhasil! Silakan masuk dengan akun Anda.");
+        document.getElementById('sandi-daftar').value = ""; 
+        setTimeout(tampilkanLogin, 2000);
+    }
+    btn.disabled = false;
+    btn.innerText = "Daftar Sekarang";
+}
+
+// Proses Login & Pengecekan Status Premium Otomatis
+async function cekLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const sandi = document.getElementById('login-sandi').value;
+    const btn = document.getElementById('btn-login');
+
+    if(!email || !sandi) {
+        tampilkanPesan("gagal", "⚠️ Masukkan email dan sandi!");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Memeriksa...";
+
+    const { data, error } = await sb.auth.signInWithPassword({
+        email: email,
+        password: sandi
+    });
+
+    if (error) {
+        tampilkanPesan("gagal", "⚠️ Email atau kata sandi salah!");
+        btn.disabled = false;
+        btn.innerText = "Masuk";
+    } else {
+        const namaUser = data.user.user_metadata.nama_lengkap || "Peserta";
+        
+        // Cek status premium dari metadata database
+        const isPremium = data.user.user_metadata.is_premium === true; 
+
+        if (isPremium) {
+            tampilkanPesan("sukses", `✅ Selamat datang, ${namaUser}! Mengarahkan ke Member Area...`);
+            setTimeout(() => {
+                window.location.href = "https://www.member.tes.cpns.online"; 
+            }, 1500);
+        } else {
+            tampilkanPesan("sukses", `✅ Selamat datang, ${namaUser}! Mengarahkan ke tryout gratis...`);
+            setTimeout(() => {
+                window.location.href = "https://Gratiscat.tescpns.online//";
+            }, 1500);
+        }
+    }
+}
+
+// Proses Lupa Sandi
+async function prosesLupaSandi() {
+    const email = document.getElementById('email-lupa').value.trim();
+    const btn = document.getElementById('btn-lupa');
+
+    if(!email) {
+        tampilkanPesan("gagal", "⚠️ Masukkan email Anda!");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Mengirim...";
+
+    const { data, error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin
+    });
+
+    if (error) {
+        tampilkanPesan("gagal", "❌ Gagal: " + error.message);
+    } else {
+        tampilkanPesan("sukses", "✅ Link reset sandi telah dikirim! Cek kotak masuk atau folder spam Anda.");
+    }
+    btn.disabled = false;
+    btn.innerText = "Kirim Link Reset";
+}
+</script>
+
+</body>
+</html>

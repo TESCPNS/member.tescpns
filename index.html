@@ -1,268 +1,526 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar & Masuk Simulasi Ujian</title>
+    <title>tescpns.online - Simulasi CAT Tes CPNS Terbaik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        /* Latar belakang biru profesional yang bersih */
-        body { 
-            background: linear-gradient(135deg, #0f4c81 0%, #1f73b7 100%); 
-            max-width: 450px; 
-            margin: 40px auto; 
-            padding: 15px; 
-            min-height: 100vh;
-        }
-        
-        .wadah { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        
-        .header-teks { margin-bottom: 25px; }
-        .header-teks h2 { color: #111827; margin: 0 0 8px 0; font-size: 24px; font-weight: 700; }
-        .header-teks p { color: #6b7280; margin: 0; font-size: 15px; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #fff; color: #1a1a2e; overflow-x: hidden; }
 
-        .tab-container {
+        /* ── HEADER & MARQUEE ── */
+        .header-wrapper {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .top-marquee {
+            background: #0f2d5a;
+            color: #fff;
+            padding: 8px 0;
+            font-size: 13.5px;
+            font-weight: 500;
+            overflow: hidden;
+            white-space: nowrap;
             display: flex;
-            background: #f3f4f6;
-            border-radius: 30px;
-            padding: 4px;
-            margin-bottom: 25px;
+            align-items: center;
         }
-        .tab-btn {
-            flex: 1;
-            text-align: center;
-            padding: 10px 0;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            color: #4b5563;
-            transition: all 0.2s ease-in-out;
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
         }
-        .tab-btn.aktif {
-            background: white;
-            color: #111827;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        .marquee-content span { color: #fbbf24; font-weight: 700; }
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
         }
 
-        input { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px; background: #f9fafb; transition: all 0.2s; }
-        input:focus { outline: none; border-color: #3b82f6; background: white; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
-        
-        .btn-utama { width: 100%; padding: 14px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: background 0.2s; }
-        .btn-utama:hover { background: #1557b0; }
-        .btn-utama:disabled { background: #9ca3af; cursor: not-allowed; }
-        
-        .tautan { text-align: center; margin-top: 15px; color: #3b82f6; cursor: pointer; font-size: 14px; font-weight: 500; }
-        .tautan:hover { text-decoration: underline; }
-        
-        .pesan { margin-top: 15px; padding: 12px; border-radius: 8px; display: none; font-size: 14px; text-align: center; }
-        .sukses { background: #def7ec; color: #03543f; border: 1px solid #c3e6cb; }
-        .gagal { background: #fde8e8; color: #9b1c1c; border: 1px solid #f5c6cb; }
+        /* ── NAVBAR ── */
+        nav {
+            padding: 0 40px;
+            height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-logo-icon {
+            width: 42px; height: 42px; border-radius: 12px;
+            background: linear-gradient(135deg, #1d4ed8 0%, #0f2d5a 100%);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+            position: relative; overflow: hidden;
+        }
+        .nav-logo-icon::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+        }
+        .nav-brand { font-size: 22px; font-weight: 900; color: #1e3a5f; letter-spacing: -0.5px; }
+        .nav-brand span { color: #f59e0b; }
+        .nav-links { display: flex; gap: 36px; }
+        .nav-links a { text-decoration: none; font-size: 14px; font-weight: 500; color: #6b7280; transition: color .2s; }
+        .nav-links a.active { color: #1d4ed8; border-bottom: 2px solid #1d4ed8; padding-bottom: 2px; }
+        .nav-links a:hover { color: #1d4ed8; }
+        .nav-cta {
+            display: flex; align-items: center; gap: 8px;
+            background: #fff; border: 1.5px solid #1d4ed8; color: #1d4ed8;
+            padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 14px;
+            text-decoration: none; transition: all .2s;
+        }
+        .nav-cta:hover { background: #1d4ed8; color: #fff; }
+
+        /* ── HERO ── */
+        .hero {
+            margin-top: 100px;
+            background: linear-gradient(135deg, #0f2d5a 0%, #1a4380 50%, #1565c0 100%);
+            position: relative; overflow: hidden;
+            min-height: 480px;
+            display: flex; align-items: stretch;
+        }
+        .hero-dots {
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+            background-size: 24px 24px; z-index: 0;
+        }
+        .hero-inner {
+            max-width: 1200px; margin: 0 auto; width: 100%;
+            display: flex; align-items: stretch;
+            position: relative; z-index: 1;
+        }
+        .hero-content {
+            flex: 0 0 55%;
+            padding: 60px 50px 60px 60px;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .hero-title {
+            font-size: 52px; font-weight: 900; color: #fff;
+            line-height: 1.05; margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        .hero-sub {
+            font-size: 15px; color: rgba(255,255,255,0.78); font-weight: 400;
+            line-height: 1.7; margin-bottom: 32px; max-width: 420px;
+        }
+        .hero-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: #fff; color: #1a3a6e;
+            padding: 14px 28px; border-radius: 10px;
+            font-weight: 700; font-size: 15px; text-decoration: none;
+            width: fit-content; margin-bottom: 28px;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+        .hero-tagline { font-size: 13.5px; color: rgba(255,255,255,0.65); line-height: 1.8; }
+        .hero-image-wrap {
+            flex: 0 0 45%;
+            position: relative; overflow: hidden;
+        }
+        .hero-image-wrap img {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center top;
+        }
+        .hero-image-wrap::before {
+            content: ''; position: absolute; inset: 0; z-index: 1;
+            background: linear-gradient(to right, #1a4380 0%, transparent 30%);
+        }
+
+        /* ── SECTION WRAPPER ── */
+        .section { max-width: 1100px; margin: 0 auto; padding: 70px 30px; }
+        .section-title {
+            text-align: center; font-size: 30px; font-weight: 800;
+            color: #1a1a2e; margin-bottom: 12px;
+        }
+        .section-sub {
+            text-align: center; font-size: 15px; color: #6b7280;
+            max-width: 620px; margin: 0 auto 50px; line-height: 1.7;
+        }
+
+        /* ── COMPARISON ── */
+        .comparison-wrap { display: flex; gap: 20px; align-items: stretch; position: relative; }
+        .comparison-card {
+            flex: 1; border-radius: 16px; padding: 32px 28px;
+            border: 1px solid;
+        }
+        .card-red { background: #fff5f5; border-color: #fecaca; }
+        .card-green { background: #f0fdf4; border-color: #bbf7d0; }
+        .card-icon-wrap {
+            width: 56px; height: 56px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px; font-size: 22px; color: #fff;
+        }
+        .icon-red { background: #ef4444; }
+        .icon-green { background: #22c55e; }
+        .card-label {
+            text-align: center; font-weight: 800; font-size: 17px; margin-bottom: 24px;
+        }
+        .label-red { color: #ef4444; }
+        .label-green { color: #16a34a; }
+        .comp-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+        .comp-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; font-weight: 500; color: #374151; }
+        .comp-list li .icon { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+        .icon-x { color: #ef4444; }
+        .icon-check { color: #22c55e; }
+        .vs-badge {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 48px; height: 48px; border-radius: 50%;
+            background: #1a1a2e; color: #fff; font-weight: 800; font-size: 14px;
+            display: flex; align-items: center; justify-content: center;
+            border: 4px solid #fff; z-index: 2;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* ── FEATURES ── */
+        .features-bg { background: #f8faff; }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px; margin-top: 10px;
+        }
+        .feature-card {
+            background: #fff; border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            padding: 28px 18px; text-align: center;
+        }
+        .feature-icon {
+            width: 52px; height: 52px; border-radius: 12px;
+            background: #eff6ff; color: #1d4ed8;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; margin: 0 auto 16px;
+        }
+        .feature-title { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; line-height: 1.4; }
+        .feature-desc { font-size: 12.5px; color: #6b7280; line-height: 1.6; }
+
+        /* ── CTA BOTTOM ── */
+        .cta-section { background: #f1f5f9; padding: 20px 30px 70px; }
+        .cta-box {
+            max-width: 1100px; margin: 0 auto;
+            background: linear-gradient(135deg, #0f2d5a 0%, #1a4380 100%);
+            border-radius: 20px; padding: 50px 56px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 40px; position: relative; overflow: hidden;
+        }
+        .cta-box::before {
+            content: ''; position: absolute; right: -60px; top: -60px;
+            width: 220px; height: 220px; border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+        }
+        .cta-left { display: flex; align-items: center; gap: 28px; z-index: 1; }
+        .cta-shield { font-size: 60px; color: #60a5fa; flex-shrink: 0; }
+        .cta-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 8px; line-height: 1.25; }
+        .cta-desc { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.6; max-width: 400px; }
+        .cta-btn {
+            display: flex; align-items: center; gap: 10px;
+            background: #1d4ed8; color: #fff;
+            padding: 16px 32px; border-radius: 10px;
+            font-weight: 700; font-size: 15px; text-decoration: none;
+            white-space: nowrap; flex-shrink: 0; z-index: 1;
+            transition: background .2s, transform .2s;
+        }
+        .cta-btn:hover { background: #2563eb; transform: translateY(-2px); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: #f8faff;
+            border-top: 1px solid #e5e7eb;
+            padding: 24px 40px;
+        }
+        .footer-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .footer-logo-icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: linear-gradient(135deg, #1d4ed8 0%, #0f2d5a 100%);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
+            position: relative; overflow: hidden;
+        }
+        .footer-logo-icon::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+        }
+        .footer-brand { font-size: 16px; font-weight: 900; color: #1e3a5f; letter-spacing: -0.5px; }
+        .footer-brand span { color: #f59e0b; }
+        .footer-copy { font-size: 12px; color: #9ca3af; }
+        .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+        .footer-links a { font-size: 13px; color: #6b7280; text-decoration: none; font-weight: 500; }
+        .footer-links a:hover { color: #1d4ed8; }
+
+        /* ── TOAST ── */
+        #toast {
+            position: fixed; bottom: 20px; left: 20px; z-index: 999;
+            background: #fff; border: 1px solid #e5e7eb;
+            border-radius: 14px; padding: 12px 16px;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+            max-width: 280px; width: calc(100% - 40px);
+            transform: translateY(120px); opacity: 0;
+            transition: transform .4s ease, opacity .4s ease;
+        }
+        #toast.show { transform: translateY(0); opacity: 1; }
+        .toast-avatar {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: #eff6ff; color: #1d4ed8;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 16px; flex-shrink: 0;
+            border: 1px solid #dbeafe;
+        }
+        .toast-name { font-size: 13px; font-weight: 600; color: #111827; }
+        .toast-action { font-size: 12px; color: #6b7280; }
+        .toast-time { font-size: 11px; color: #1d4ed8; font-weight: 500; margin-top: 2px; }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 20px; }
+            .nav-links { display: none; }
+            .hero-inner { flex-direction: column; }
+            .hero-image-wrap { display: none; }
+            .hero-content { padding: 40px 24px; }
+            .hero-title { font-size: 36px; }
+            .section { padding: 50px 20px; }
+            .comparison-wrap { flex-direction: column; }
+            .vs-badge { display: none; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .cta-box { flex-direction: column; padding: 36px 28px; text-align: center; }
+            .cta-left { flex-direction: column; text-align: center; }
+            .cta-shield { display: none; }
+            .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+        }
     </style>
+
+<style>
+img{max-width:100%;height:auto}
+.container,.hero-inner,.section,.cta-box,.footer-inner{width:100%;max-width:1200px;margin:auto}
+@media (max-width:1024px){
+.hero-inner,.cta-box,.footer-inner{flex-direction:column}
+.features-grid{grid-template-columns:repeat(2,1fr)!important}
+}
+@media (max-width:768px){
+nav{padding:0 16px!important}
+.nav-links{display:none!important}
+.hero-title{font-size:36px!important}
+.hero-content{padding:40px 20px!important}
+.hero-image-wrap{display:none!important}
+.comparison-wrap{flex-direction:column!important}
+.vs-badge{display:none!important}
+.features-grid{grid-template-columns:1fr!important}
+.cta-box,.footer-inner,.cta-left{text-align:center;flex-direction:column!important}
+}
+</style>
+
 </head>
 <body>
 
-<div class="wadah">
-    <!-- Header Dinamis (Default: Daftar) -->
-    <div class="header-teks">
-        <h2 id="teks-judul">Buat Akun Baru</h2>
-        <p id="teks-keterangan">Mulai perjalanan ujian Anda hari ini</p>
-    </div>
-
-    <!-- Tab Pilihan (Dibalik: Daftar di kiri, Masuk di kanan) -->
-    <div class="tab-container" id="menu-tab">
-        <div class="tab-btn aktif" id="tab-daftar" onclick="tampilkanDaftar()">Daftar</div>
-        <div class="tab-btn" id="tab-masuk" onclick="tampilkanLogin()">Masuk</div>
-    </div>
-
-    <!-- Form Daftar (Ditampilkan Pertama) -->
-    <div id="form-daftar">
-        <input type="text" id="nama" placeholder="Nama Lengkap" required>
-        <input type="email" id="email" placeholder="Alamat Email" required>
-        <input type="tel" id="wa" placeholder="Nomor WhatsApp" required>
-        <input type="password" id="sandi-daftar" placeholder="Buat Kata Sandi (Min. 6 karakter)" required>
-        <button class="btn-utama" id="btn-daftar" onclick="prosesDaftar()">Daftar Sekarang</button>
-    </div>
-
-    <!-- Form Login (Disembunyikan Secara Default) -->
-    <div id="form-login" style="display:none;">
-        <input type="email" id="login-email" placeholder="Alamat Email">
-        <input type="password" id="login-sandi" placeholder="Kata Sandi">
-        <div style="text-align: right; margin-top: 5px;">
-            <span class="tautan" style="font-size: 13px; color: #6b7280;" onclick="tampilkanLupaSandi()">Lupa kata sandi?</span>
+<!-- HEADER & NAVBAR WRAPPER -->
+<header class="header-wrapper">
+    <!-- MARQUEE -->
+    <div class="top-marquee">
+        <div class="marquee-content">
+            <i class="fa-solid fa-bullhorn" style="margin-right: 8px;"></i>
+            <span>Silahkan Mulai Gratis</span> untuk mengukur kemampuan anda saat ini. Jangan tunggu sampai hari H ujian tiba!
         </div>
-        <button class="btn-utama" id="btn-login" onclick="cekLogin()">Masuk</button>
     </div>
 
-    <!-- Form Lupa Sandi -->
-    <div id="form-lupa" style="display:none;">
-        <input type="email" id="email-lupa" placeholder="Email Terdaftar">
-        <button class="btn-utama" id="btn-lupa" onclick="prosesLupaSandi()">Kirim Link Reset</button>
-        <div class="tautan" onclick="tampilkanLogin()">Batal & Kembali masuk</div>
-    </div>
+    <!-- NAVBAR -->
+    <nav>
+        <a class="nav-logo" href="#">
+            <div class="nav-logo-icon">
+                <i class="fa-solid fa-award" style="font-size:22px;color:#fbbf24;"></i>
+            </div>
+            <span class="nav-brand">tescpns<span>.online</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="#" class="active">Beranda</a>
+            <a href="#fitur">Fitur</a>
+        </div>
+        <a href="https://member.tescpns.online" class="nav-cta">
+            <i class="fa-regular fa-user"></i> Mulai Gratis
+        </a>
+    </nav>
+</header>
 
-    <div id="notif" class="pesan"></div>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-dots"></div>
+    <div class="hero-inner">
+        <div class="hero-content">
+            <h1 class="hero-title">Simulasi CAT<br>Tes CPNS</h1>
+            <p class="hero-sub">
+                Platform Pelatihan Simulasi Tes CAT CPNS Berstandar dan Berpenampilan Sesuai Mekanisme Sistem Resmi BKN
+            </p>
+            <a href="https://member.tescpns.online" class="hero-btn">
+                <i class="fa-regular fa-user"></i> Mulai Gratis
+            </a>
+            <p class="hero-tagline">
+                Jangan hanya membaca teori dari buku.<br>
+                Latih kemampuanmu dengan simulasi CAT CPNS<br>
+                yang terasa seperti ujian sebenarnya.<br>
+                Siapkan dirimu sebelum hari penentuan tiba.
+            </p>
+        </div>
+        <div class="hero-image-wrap">
+            <img src="gambar 1.png" alt="Peserta mengerjakan CAT CPNS" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+    </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="keunggulan">
+    <div class="section">
+        <h2 class="section-title">Kenapa Belajar Dengan Simulasi CAT Lebih Efektif?</h2>
+        <p class="section-sub">
+            Belajar teori memang penting. Namun banyak peserta gagal karena tidak terbiasa mengerjakan soal dalam sistem CAT dan batas waktu yang ketat.
+        </p>
+
+        <div class="comparison-wrap">
+            <!-- Buku -->
+            <div class="comparison-card card-red">
+                <div class="card-icon-wrap icon-red">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h3 class="card-label label-red">Belajar Dengan Buku</h3>
+                <ul class="comp-list">
+                    <li><span class="icon icon-x"><i class="fa-solid fa-xmark"></i></span> Hanya membaca materi</li>
+                    <li><span class="icon icon-x"><i class="fa-solid fa-xmark"></i></span> Tidak melatih manajemen waktu</li>
+                    <li><span class="icon icon-x"><i class="fa-solid fa-xmark"></i></span> Tidak tahu skor sebenarnya</li>
+                    <li><span class="icon icon-x"><i class="fa-solid fa-xmark"></i></span> Tidak merasakan tekanan ujian</li>
+                    <li><span class="icon icon-x"><i class="fa-solid fa-xmark"></i></span> Sulit mengukur perkembangan</li>
+                </ul>
+            </div>
+
+            <div class="vs-badge">VS</div>
+
+            <!-- CAT -->
+            <div class="comparison-card card-green">
+                <div class="card-icon-wrap icon-green">
+                    <i class="fa-solid fa-desktop"></i>
+                </div>
+                <h3 class="card-label label-green">Belajar Dengan Simulasi CAT<br>tescpns.online</h3>
+                <ul class="comp-list">
+                    <li><span class="icon icon-check"><i class="fa-solid fa-check"></i></span> Pengalaman seperti ujian resmi</li>
+                    <li><span class="icon icon-check"><i class="fa-solid fa-check"></i></span> Timer berjalan seperti CAT BKN</li>
+                    <li><span class="icon icon-check"><i class="fa-solid fa-check"></i></span> Skor langsung muncul</li>
+                    <li><span class="icon icon-check"><i class="fa-solid fa-check"></i></span> Analisis hasil per subtes</li>
+                    <li><span class="icon icon-check"><i class="fa-solid fa-check"></i></span> Latihan strategi mengatur waktu</li>
+                    <li><span class="icon icon-check"><i class="fa-solid fa-check"></i></span> Membiasakan diri dengan tekanan ujian</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section id="fitur" class="features-bg">
+    <div class="section" style="padding-top:60px;padding-bottom:60px;">
+        <h2 class="section-title">Fitur Unggulan tescpns.online</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-regular fa-file-lines"></i></div>
+                <h3 class="feature-title">Bank Soal Lengkap</h3>
+                <p class="feature-desc">Ribuan soal TWK, TIU, dan TKP yang terus diperbarui mengikuti pola terbaru.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-regular fa-clock"></i></div>
+                <h3 class="feature-title">Simulasi CAT Realistis</h3>
+                <p class="feature-desc">Tampilan dan alur pengerjaan dibuat semirip mungkin dengan CAT BKN.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-chart-column"></i></div>
+                <h3 class="feature-title">Analisis Hasil</h3>
+                <p class="feature-desc">Ketahui kekuatan dan kelemahanmu pada setiap materi secara detail.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-regular fa-circle-down"></i></div>
+                <h3 class="feature-title">Detail Pembahasan Unduhan</h3>
+                <p class="feature-desc">Setiap soal dilengkapi pembahasan mendetail yang bisa kamu unduh kapan saja.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                <h3 class="feature-title">Bisa Diakses Dimana Saja</h3>
+                <p class="feature-desc">Laptop, tablet, maupun smartphone. Belajar fleksibel kapan saja.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA BOTTOM -->
+<section class="cta-section">
+    <div class="cta-box">
+        <div class="cta-left">
+            <div class="cta-shield"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <h2 class="cta-title">Latihan Terbaik, Persiapan Matang,<br>Lolos CPNS Impian!</h2>
+                <p class="cta-desc">Tingkatkan peluangmu lolos seleksi CPNS dengan latihan menggunakan simulasi CAT terbaik dan terpercaya.</p>
+            </div>
+        </div>
+        <a href="https://member.tescpns.online" class="cta-btn">
+            <i class="fa-solid fa-rocket"></i> Mulai Gratis Sekarang
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div>
+            <a class="footer-logo" href="#">
+                <div class="footer-logo-icon"><i class="fa-solid fa-award" style="font-size:16px;color:#fbbf24;"></i></div>
+                <span class="footer-brand">tescpns<span>.online</span></span>
+            </a>
+            <p class="footer-copy" style="margin-top:6px;">© 2026 tescpns.online. All rights reserved.</p>
+        </div>
+        <div class="footer-links">
+            <a href="#">Beranda</a>
+            <a href="#">Fitur</a>
+            <a href="#">Syarat & Ketentuan</a>
+        </div>
+        <a href="https://member.tescpns.online" class="nav-cta">
+            <i class="fa-regular fa-user"></i> Mulai Gratis
+        </a>
+    </div>
+</footer>
+
+<!-- TOAST -->
+<div id="toast">
+    <div class="toast-avatar" id="t-avatar">A</div>
+    <div>
+        <div class="toast-name" id="t-name">Andi Saputra</div>
+        <div class="toast-action">baru saja mendaftar gratis</div>
+        <div class="toast-time"><i class="fa-regular fa-clock"></i> <span id="t-time-text">Beberapa detik yang lalu</span></div>
+    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// Konfigurasi Supabase
-const SUPABASE_URL = "https://fnxkxwecgkfhdphlzfft.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZueGt4d2VjZ2tmaGRwaGx6ZmZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MzQ2NTUsImV4cCI6MjEwMDUxMDY1NX0.r7p2YF4RVEZQQGDAQqvL4Am9n8vpQbuIQQjYLeH1upw";
+const names = [
+    "Budi Santoso", "Siti Rahmawati", "Ayu Lestari", "Agung Pratama", "Rina Amelia",
+    "Dian Permata", "Eko Purnomo", "Fitriani Dewi", "Hendra Setiawan", "Indah Lestari",
+    "Maya Sari", "Novita Dewi", "Putri Maharani", "Rizky Hidayat", "Surya Saputra",
+    "Wahyu Nugraha", "Ahmad Fauzi", "Andi Saputra", "Arief Rachman", "Dedi Irawan",
+    "Fajar Nugraha", "Ilham Akbar", "Naufal Zaki", "Dwi Susanti", "Yoga Pratama",
+    "Adhitya Gunawan", "Sri Wahyuni", "Eka Putra", "Gita Rahayu", "Hasan Basri",
+    "Muhammad Yusuf", "Linda Sari", "Anisa Fitri", "Nadia Safitri", "Rahmat Hidayat",
+    "Tri Wibowo", "Nurul Huda", "Bambang Priyono", "Arif Kurniawan", "Irfan Maulana"
+];
+const times = ["Baru saja", "Beberapa detik yang lalu", "1 menit yang lalu"];
 
-const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const toast = document.getElementById('toast');
+const tName = document.getElementById('t-name');
+const tAvatar = document.getElementById('t-avatar');
+const tTimeText = document.getElementById('t-time-text');
 
-function tampilkanPesan(tipe, teks) {
-    const notif = document.getElementById('notif');
-    notif.className = `pesan ${tipe}`;
-    notif.innerHTML = teks;
-    notif.style.display = "block";
+function showToast() {
+    const name = names[Math.floor(Math.random() * names.length)];
+    const time = times[Math.floor(Math.random() * times.length)];
+    tName.textContent = name;
+    tAvatar.textContent = name.charAt(0);
+    tTimeText.textContent = time;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
 }
 
-function sembunyikanSemua() {
-    document.getElementById('form-daftar').style.display = 'none';
-    document.getElementById('form-login').style.display = 'none';
-    document.getElementById('form-lupa').style.display = 'none';
-    document.getElementById('notif').style.display = 'none';
-}
-
-function tampilkanDaftar() {
-    sembunyikanSemua();
-    document.getElementById('form-daftar').style.display = 'block';
-    document.getElementById('menu-tab').style.display = 'flex';
-    document.getElementById('tab-daftar').className = 'tab-btn aktif';
-    document.getElementById('tab-masuk').className = 'tab-btn';
-    document.getElementById('teks-judul').innerText = 'Buat Akun Baru';
-    document.getElementById('teks-keterangan').innerText = 'Mulai perjalanan ujian Anda hari ini';
-}
-
-function tampilkanLogin() {
-    sembunyikanSemua();
-    document.getElementById('form-login').style.display = 'block';
-    document.getElementById('menu-tab').style.display = 'flex';
-    document.getElementById('tab-masuk').className = 'tab-btn aktif';
-    document.getElementById('tab-daftar').className = 'tab-btn';
-    document.getElementById('teks-judul').innerText = 'Masuk ke Akun';
-    document.getElementById('teks-keterangan').innerText = 'Lanjutkan persiapan Anda';
-}
-
-function tampilkanLupaSandi() {
-    sembunyikanSemua();
-    document.getElementById('form-lupa').style.display = 'block';
-    document.getElementById('menu-tab').style.display = 'none';
-    document.getElementById('teks-judul').innerText = 'Lupa Kata Sandi';
-    document.getElementById('teks-keterangan').innerText = 'Kami akan mengirimkan link reset ke email Anda';
-}
-
-// Proses Pendaftaran Akun Baru
-async function prosesDaftar() {
-    const nama = document.getElementById('nama').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const wa = document.getElementById('wa').value.trim();
-    const sandi = document.getElementById('sandi-daftar').value;
-    const btn = document.getElementById('btn-daftar');
-
-    if(!nama || !email || !wa || !sandi) {
-        tampilkanPesan("gagal", "⚠️ Semua kolom wajib diisi!");
-        return;
-    }
-    if(sandi.length < 6) {
-        tampilkanPesan("gagal", "⚠️ Kata sandi minimal 6 karakter!");
-        return;
-    }
-
-    btn.disabled = true;
-    btn.innerText = "Memproses...";
-
-    const { data, error } = await sb.auth.signUp({
-        email: email,
-        password: sandi,
-        options: {
-            data: { nama_lengkap: nama, no_whatsapp: wa, is_premium: false }
-        }
-    });
-
-    if (error) {
-        tampilkanPesan("gagal", "❌ Gagal: " + error.message);
-    } else {
-        tampilkanPesan("sukses", "✅ Pendaftaran Berhasil! Silakan masuk dengan akun Anda.");
-        document.getElementById('sandi-daftar').value = ""; 
-        setTimeout(tampilkanLogin, 2000);
-    }
-    btn.disabled = false;
-    btn.innerText = "Daftar Sekarang";
-}
-
-// Proses Login & Pengecekan Status Premium Otomatis
-async function cekLogin() {
-    const email = document.getElementById('login-email').value.trim();
-    const sandi = document.getElementById('login-sandi').value;
-    const btn = document.getElementById('btn-login');
-
-    if(!email || !sandi) {
-        tampilkanPesan("gagal", "⚠️ Masukkan email dan sandi!");
-        return;
-    }
-
-    btn.disabled = true;
-    btn.innerText = "Memeriksa...";
-
-    const { data, error } = await sb.auth.signInWithPassword({
-        email: email,
-        password: sandi
-    });
-
-    if (error) {
-        tampilkanPesan("gagal", "⚠️ Email atau kata sandi salah!");
-        btn.disabled = false;
-        btn.innerText = "Masuk";
-    } else {
-        const namaUser = data.user.user_metadata.nama_lengkap || "Peserta";
-        
-        // Cek status premium dari metadata database
-        const isPremium = data.user.user_metadata.is_premium === true; 
-
-        if (isPremium) {
-            tampilkanPesan("sukses", `✅ Selamat datang, ${namaUser}! Mengarahkan ke Member Area...`);
-            setTimeout(() => {
-                window.location.href = "https://www.member.tes.cpns.online"; 
-            }, 1500);
-        } else {
-            tampilkanPesan("sukses", `✅ Selamat datang, ${namaUser}! Mengarahkan ke tryout gratis...`);
-            setTimeout(() => {
-                window.location.href = "https://Gratiscat.tescpns.online//";
-            }, 1500);
-        }
-    }
-}
-
-// Proses Lupa Sandi
-async function prosesLupaSandi() {
-    const email = document.getElementById('email-lupa').value.trim();
-    const btn = document.getElementById('btn-lupa');
-
-    if(!email) {
-        tampilkanPesan("gagal", "⚠️ Masukkan email Anda!");
-        return;
-    }
-
-    btn.disabled = true;
-    btn.innerText = "Mengirim...";
-
-    const { data, error } = await sb.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin
-    });
-
-    if (error) {
-        tampilkanPesan("gagal", "❌ Gagal: " + error.message);
-    } else {
-        tampilkanPesan("sukses", "✅ Link reset sandi telah dikirim! Cek kotak masuk atau folder spam Anda.");
-    }
-    btn.disabled = false;
-    btn.innerText = "Kirim Link Reset";
-}
+setTimeout(() => { showToast(); setInterval(showToast, 8000); }, 2500);
 </script>
 
 </body>
